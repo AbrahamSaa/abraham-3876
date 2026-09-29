@@ -1,0 +1,18 @@
+import { Outlet } from 'react-router-dom'
+
+export const AuthLayout = () => {
+    return (
+        <div className='w-full h-screen flex flex-wrap max-md:flex-col'>
+            <div className='flex-4/12 gap-6 bg-accent content-center p-4 max-md:flex-2/12'>
+                <h2 className='text-white! text-4xl font-bold'>Apuesta por el caracol<br />más veloz de la pista.</h2>
+                <p className='text-muted pt-4'>Consulta tu saldo, recarga con SnailPay y sigue las 6 carreras más rapidas del día</p>
+            </div>
+            <div className='flex-6/12 content-center justify-items-center max-md:flex-8/12'>
+
+                <div className='w-3/5 max-md:w-full max-md:px-4'>
+                    <Outlet />
+                </div>
+            </div>
+        </div>
+    )
+}
