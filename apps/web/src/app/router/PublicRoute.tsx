@@ -7,11 +7,11 @@ interface Props {
     children: React.ReactNode;
 }
 
-export const PrivateRoute = ({ children }: Props) => {
+export const PublicRoute = ({ children }: Props) => {
 
     const { authStatus } = useAuth();
 
-    if (authStatus === 'Authenticated') {
+    if (authStatus === 'Unauthenticated') {
 
         return (
             <div>
@@ -20,8 +20,8 @@ export const PrivateRoute = ({ children }: Props) => {
         )
     }
 
-    if (authStatus === "Unauthenticated") {
-        return <Navigate to={"/"} />;
+    if (authStatus === "Authenticated") {
+        return <Navigate to={"/dashboard"} />;
     }
 
     return <Spinner />

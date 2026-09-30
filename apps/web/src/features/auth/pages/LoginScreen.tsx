@@ -27,10 +27,7 @@ export const LoginScreen = () => {
     const handleOnSubmit = async (values: LoginFormValues) => {
         try {
             const user = await login(values);
-            console.log(user);
             setLogin(user);
-            redirect("/dashboard");
-
 
         } catch (error) {
             if (error instanceof Error) {

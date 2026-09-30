@@ -1,7 +1,11 @@
 import React from 'react'
+import { PrivateRoute } from '../router/PrivateRoute'
+import { Outlet } from 'react-router-dom'
 
 export const DashboardLayout = () => {
     return (
-        <div>DashboardLayout</div>
+        <PrivateRoute>
+            <Outlet />
+        </PrivateRoute>
     )
 }
