@@ -1,6 +1,6 @@
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { type SignupFormValues, signupSchema } from '@snail/shared';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,12 +11,13 @@ import { signup } from '../services/authService';
 import { SnailAlert } from '@/src/components/SnailAlert';
 
 export const SignupScreen = () => {
-
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
         watch,
         setError,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<SignupFormValues>({
         resolver: zodResolver(signupSchema),
@@ -26,6 +27,14 @@ export const SignupScreen = () => {
     const handleOnSubmit = async (values: SignupFormValues) => {
         try {
             await signup(values);
+            reset({
+                confirmPassword: "",
+                email: "",
+                name: "",
+                password: "",
+            });
+
+            navigate("/");
 
         } catch (error) {
             if (error instanceof Error) {
@@ -35,8 +44,6 @@ export const SignupScreen = () => {
             }
         }
     }
-
-    console.log(errors);
 
     return (
         <Card size='default'>
