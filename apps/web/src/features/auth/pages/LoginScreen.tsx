@@ -1,13 +1,18 @@
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import { Link, redirect } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { type LoginFormValues, loginSchema } from '@snail/shared';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SnailInput } from '@/src/components/SnailInput';
 import { SnailButton } from '@/src/components/SnailButton';
+import { SnailAlert } from '@/src/components/SnailAlert';
+import { login } from '../services/authService';
+import { useAuth } from '../hooks/useAuth';
 
 export const LoginScreen = () => {
+
+    const { setLogin } = useAuth();
 
     const {
         register,
@@ -20,10 +25,21 @@ export const LoginScreen = () => {
     });
 
     const handleOnSubmit = async (values: LoginFormValues) => {
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-    }
+        try {
+            const user = await login(values);
+            console.log(user);
+            setLogin(user);
+            redirect("/dashboard");
 
-    console.log(isSubmitting);
+
+        } catch (error) {
+            if (error instanceof Error) {
+                setError('root', {
+                    message: error.message
+                });
+            }
+        }
+    }
 
     return (
         <Card size='default'>
@@ -54,6 +70,7 @@ export const LoginScreen = () => {
                             autoComplete='current-password'
                             type='password'
                             error={errors.password?.message} />
+                        {errors.root && <SnailAlert variant={"destructive"} title={'Atención'} description={errors.root.message ?? ""} />}
                         <SnailButton
                             type='submit'
                             isLoading={isSubmitting}
