@@ -1,6 +1,6 @@
-import React from 'react'
-import type { SnailRace } from '../interfaces/snailrace.interface'
 import { Snail } from 'lucide-react';
+import { cn } from 'cn';
+import type { SnailRace } from '../interfaces/snail-race.interface';
 
 interface Props {
     race: SnailRace;
@@ -9,8 +9,8 @@ interface Props {
 
 export const SnailDailyRaceTile = ({ race, isLastIndex = false }: Props) => {
     return (
-        <div className={`flex flex-row px-2 py-3 items-center justify-between ${!isLastIndex ? 'border-b' : ''}`}>
-            <div className='felx-col flex-1'>
+        <div className={cn('flex flex-row px-2 py-3 items-center justify-between', !isLastIndex && 'border-b')}>
+            <div className='flex-col flex-1'>
                 <h5 className='font-heading font-semibold text-sm'>{race.race}</h5>
                 <p className='font-sans text-xs text-gray-500'>{race.hour}</p>
             </div>

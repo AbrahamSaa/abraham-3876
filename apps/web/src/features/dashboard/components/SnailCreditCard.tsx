@@ -1,6 +1,6 @@
-import { SnailButton } from '@/src/components/SnailButton'
-import { CreditCard, Snail } from 'lucide-react'
-import React from 'react'
+import { Snail } from 'lucide-react'
+import { cn } from 'cn'
+import { PaymentDialog } from '../../payment/components/PaymentDialog';
 
 interface Props {
     className?: string;
@@ -8,7 +8,7 @@ interface Props {
 
 export const SnailCreditCard = ({ className }: Props) => {
     return (
-        <div className={`bg-primary/90 rounded-md shadow-md p-3 flex flex-col text-white ${className}`}>
+        <div className={cn('bg-primary/90 rounded-md shadow-md p-3 flex flex-col text-white', className)}>
             <div className='flex gap-3'>
                 <div className='flex-1'>
                     <h5 className='font-sans text-xs'>Saldo disponible</h5>
@@ -24,7 +24,8 @@ export const SnailCreditCard = ({ className }: Props) => {
             <div className='bg-white/10 rounded-md p-3 my-3'>
                 <p className='text-sm'>Tu saldo está en cero. carga saldo con SnailPay para empezar a apostar en las carreras más rapidas del día.</p>
             </div>
-            <SnailButton isLoading={false} title={'Recargar saldo'} variant={"outline"} className='text-mist-800 cursor-pointer' />
+            <div className="flex-1"></div>
+            <PaymentDialog />
         </div>
     )
 }

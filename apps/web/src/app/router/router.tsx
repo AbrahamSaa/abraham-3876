@@ -1,8 +1,7 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import { AuthLayout } from '../layout/AuthLayout';
 import { LoginScreen } from '@/src/features/auth/pages/LoginScreen';
 import { SignupScreen } from '@/src/features/auth/pages/SignupScreen';
-import { PrivateRoute } from './PrivateRoute';
 import { DashboardLayout } from '../layout/DashboardLayout';
 import { DashboardScreen } from '@/src/features/dashboard/pages/DashboardScreen';
 

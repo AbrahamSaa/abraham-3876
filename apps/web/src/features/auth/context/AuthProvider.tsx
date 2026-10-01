@@ -1,59 +1,33 @@
-import { createContext, useEffect, useState, type ReactNode } from "react";
-import type { User } from "../interfaces/user.interface";
-import { storage } from "@snail/shared";
-import { SESSION } from "../services/authService";
-
-
-type AuthStatus = "Authenticated" | "Unauthenticated" | "initial";
-
-export interface AuthContextType {
-    user: User | undefined;
-    authStatus: AuthStatus;
-    setLogin: (user: User) => void;
-    logout: () => void;
-}
-
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+import { useCallback, useMemo, useState, type ReactNode } from "react";
+import type { SessionUser } from "../interfaces/user.interface";
+import { AuthContext, type AuthStatus } from "./AuthContext";
+import { clearSession, getStoredSession } from "../services/authService";
 
 interface AuthProviderProps {
     children: ReactNode;
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+    // localStorage is synchronous, so the session can be restored on the first render.
+    const [session] = useState(getStoredSession);
+    const [authStatus, setAuthStatus] = useState<AuthStatus>(session ? "authenticated" : "unauthenticated");
+    const [user, setUser] = useState<SessionUser | undefined>(session ?? undefined);
 
-    const [status, setStatus] = useState<AuthStatus>("initial");
-    const [user, setUser] = useState<User | undefined>(undefined);
-
-    const setLogin = (user: User) => {
-        setUser(user);
-        setStatus("Authenticated");
-    };
-
-    const logout = () => {
-        storage.remove(SESSION);
-        setStatus("Unauthenticated");
-        setUser(undefined);
-
-    }
-
-    useEffect(() => {
-        const user = storage.get<User>(SESSION);
-        if (user !== null) {
-            setLogin(user);
-        } else {
-            setStatus("Unauthenticated");
-        }
+    const setLogin = useCallback((nextUser: SessionUser) => {
+        setUser(nextUser);
+        setAuthStatus("authenticated");
     }, []);
 
+    const logout = useCallback(() => {
+        clearSession();
+        setUser(undefined);
+        setAuthStatus("unauthenticated");
+    }, []);
 
-    return (
-        <AuthContext.Provider value={{
-            authStatus: status,
-            user: user,
-            setLogin,
-            logout,
-        }}>
-            {children}
-        </AuthContext.Provider>
+    const value = useMemo(
+        () => ({ authStatus, user, setLogin, logout }),
+        [authStatus, user, setLogin, logout]
     );
+
+    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

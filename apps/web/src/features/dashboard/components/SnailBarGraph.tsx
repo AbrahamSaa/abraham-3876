@@ -1,5 +1,8 @@
+import { cn } from 'cn';
 import { Bar, BarChart, Cell, Tooltip, XAxis, YAxis } from 'recharts';
-import { getWinsBySnail, snailRace } from '../helper/snails';
+import { CHART_COLORS } from '../constants/chart-colors';
+import { getCompletedRaces, getWinsBySnail } from '../helpers/snails';
+import { DashboardCard } from './DashboardCard';
 
 interface Props {
     className?: string;
@@ -7,10 +10,10 @@ interface Props {
 
 export const SnailBarGraph = ({ className }: Props) => {
     const data = getWinsBySnail();
-    const totalRaces = snailRace.filter((race) => race.completed).length;
+    const totalRaces = getCompletedRaces().length;
 
     return (
-        <div className={`bg-white shadow-md rounded-md p-3 flex flex-col gap-3 ${className ?? ''}`}>
+        <DashboardCard className={cn('gap-3', className)}>
             <div>
                 <h5 className='font-heading text-md font-semibold'>Victorias por caracol</h5>
                 <p className='text-xs font-normal font-sans text-gray-500'>
@@ -25,11 +28,11 @@ export const SnailBarGraph = ({ className }: Props) => {
             >
                 <XAxis dataKey='name' tickLine={false} axisLine={false} fontSize={12} />
                 <YAxis allowDecimals={false} domain={[0, totalRaces]} tickLine={false} axisLine={false} fontSize={12} />
-                <Tooltip formatter={(value) => [value, 'Victorias']} cursor={{ fill: '#f3f4f6' }} />
+                <Tooltip formatter={(value) => [value, 'Victorias']} cursor={{ fill: CHART_COLORS.barCursor }} />
                 <Bar dataKey='wins' radius={[6, 6, 0, 0]} maxBarSize={48}>
                     {data.map((snail) => <Cell key={snail.name} fill={snail.color} />)}
                 </Bar>
             </BarChart>
-        </div>
+        </DashboardCard>
     )
 }
