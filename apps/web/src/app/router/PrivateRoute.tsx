@@ -1,7 +1,7 @@
 import { Spinner } from '@/components/ui/spinner';
 import { useAuth } from '@/src/features/auth/hooks/useAuth';
 import React from 'react';
-import { Navigate, redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 interface Props {
     children: React.ReactNode;
@@ -11,7 +11,7 @@ export const PrivateRoute = ({ children }: Props) => {
 
     const { authStatus } = useAuth();
 
-    if (authStatus === 'Authenticated') {
+    if (authStatus === 'authenticated') {
 
         return (
             <div>
@@ -20,7 +20,7 @@ export const PrivateRoute = ({ children }: Props) => {
         )
     }
 
-    if (authStatus === "Unauthenticated") {
+    if (authStatus === "unauthenticated") {
         return <Navigate to={"/"} />;
     }
 

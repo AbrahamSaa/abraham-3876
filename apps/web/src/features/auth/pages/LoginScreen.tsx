@@ -1,6 +1,6 @@
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Link, redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { type LoginFormValues, loginSchema } from '@snail/shared';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,6 +9,7 @@ import { SnailButton } from '@/src/components/SnailButton';
 import { SnailAlert } from '@/src/components/SnailAlert';
 import { login } from '../services/authService';
 import { useAuth } from '../hooks/useAuth';
+import { getErrorMessage } from '@/src/lib/get-error-message';
 
 export const LoginScreen = () => {
 
@@ -24,54 +25,48 @@ export const LoginScreen = () => {
         mode: "onTouched"
     });
 
-    const handleOnSubmit = async (values: LoginFormValues) => {
+    const submitLogin = async (values: LoginFormValues) => {
         try {
             const user = await login(values);
             setLogin(user);
-
         } catch (error) {
-            if (error instanceof Error) {
-                setError('root', {
-                    message: error.message
-                });
-            }
+            setError('root', { message: getErrorMessage(error) });
         }
     }
 
     return (
         <Card size='default'>
             <CardHeader>
-                <CardTitle >Iniciar sesión</CardTitle>
+                <CardTitle>Iniciar sesión</CardTitle>
                 <CardDescription>Inicia sesión para conocer tu saldo y apostar en los mejores caracoles</CardDescription>
                 <CardAction>
-                    <Link to={"/signup"}><Button variant={"link"} className={"cursor-pointer"} >Crea una cuenta</Button>
-                    </Link>
+                    <Button variant="link" className="cursor-pointer" nativeButton={false} render={<Link to="/signup" />}>
+                        Crea una cuenta
+                    </Button>
                 </CardAction>
-
-
             </CardHeader>
             <CardContent>
-                <form onSubmit={handleSubmit(handleOnSubmit)}>
+                <form onSubmit={handleSubmit(submitLogin)}>
                     <div className='flex flex-col gap-3'>
                         <SnailInput
                             id='email'
-                            label={'Email'}
+                            label="Email"
                             {...register("email")}
                             autoComplete='email'
                             type='email'
                             error={errors.email?.message} />
                         <SnailInput
                             id='password'
-                            label={'Contraseña'}
+                            label="Contraseña"
                             {...register("password")}
                             autoComplete='current-password'
                             type='password'
                             error={errors.password?.message} />
-                        {errors.root && <SnailAlert variant={"destructive"} title={'Atención'} description={errors.root.message ?? ""} />}
+                        {errors.root && <SnailAlert variant={"destructive"} title="Atención" description={errors.root.message ?? ''} />}
                         <SnailButton
                             type='submit'
                             isLoading={isSubmitting}
-                            title={'Iniciar sesión'} />
+                            title="Iniciar sesión" />
                     </div>
                 </form>
             </CardContent>

@@ -1,6 +1,7 @@
-import React from 'react'
-import { snailRace } from '../helper/snails';
-import { Snail } from 'lucide-react';
+import { cn } from 'cn';
+import { getCompletedRaces, snailRace } from '../helpers/snails';
+import { DashboardCard } from './DashboardCard';
+import { Pill } from './Pill';
 import { SnailDailyRaceTile } from './SnailDailyRaceTile';
 
 interface Props {
@@ -8,23 +9,22 @@ interface Props {
 }
 
 export const SnailRaceCard = ({ className }: Props) => {
+    const completedRaces = getCompletedRaces().length;
 
     return (
-        <div className={`${className} bg-white shadow-md rounded-md p-3 flex flex-col gap-3`}>
-
+        <DashboardCard className={cn('gap-3', className)}>
             <div className='flex flex-row justify-between items-center'>
                 <div className='flex-1'>
                     <h5 className='font-heading text-md font-semibold'>Carreras de hoy</h5>
-                    <p className='text-xs font-normal font-sans text-gray-500'>{snailRace.length} de {snailRace.filter((race) => race.completed).length} finalizadas</p>
+                    <p className='text-xs font-normal font-sans text-gray-500'>{completedRaces} de {snailRace.length} finalizadas</p>
                 </div>
-                <div>
-                    <span className='bg-gray-200 rounded-full text-xs items-center p-2 shadow-sm'>Día cerrado</span>
-                </div>
-
+                <Pill>Día cerrado</Pill>
             </div>
-            <div className=''>
-                {snailRace.map((race, index) => <SnailDailyRaceTile key={race.id} race={race} isLastIndex={index == snailRace.length - 1} />)}
+            <div>
+                {snailRace.map((race, index) => (
+                    <SnailDailyRaceTile key={race.id} race={race} isLastIndex={index === snailRace.length - 1} />
+                ))}
             </div>
-        </div>
+        </DashboardCard>
     )
 }
