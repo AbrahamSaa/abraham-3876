@@ -10,6 +10,7 @@ export interface AuthContextType {
     user: User | undefined;
     authStatus: AuthStatus;
     setLogin: (user: User) => void;
+    logout: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -28,6 +29,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         setStatus("Authenticated");
     };
 
+    const logout = () => {
+        storage.remove(SESSION);
+        setStatus("Unauthenticated");
+        setUser(undefined);
+
+    }
+
     useEffect(() => {
         const user = storage.get<User>(SESSION);
         if (user !== null) {
@@ -43,6 +51,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             authStatus: status,
             user: user,
             setLogin,
+            logout,
         }}>
             {children}
         </AuthContext.Provider>
