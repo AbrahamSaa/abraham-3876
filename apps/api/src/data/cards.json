@@ -1,0 +1,31 @@
+{
+    "cards": [
+        {
+            "number": "1234123412341234",
+            "date": "12/26",
+            "cvv": "543",
+            "result": true
+        },
+        {
+            "number": "4111111100000000",
+            "message": "cc_rejected_other",
+            "errorStatus": "SNAIL_PAY_ERROR",
+            "httpStatus": 402,
+            "result": false
+        },
+        {
+            "number": "4111000000000000",
+            "message": "cc_rejected_insufficient_amount",
+            "errorStatus": "INSUFFICIENT_FUNDS",
+            "httpStatus": 402,
+            "result": false
+        },
+        {
+            "number": "4222222222222222",
+            "message": "timeout",
+            "errorStatus": "TIMEOUT",
+            "httpStatus": 408,
+            "result": false
+        }
+    ]
+}

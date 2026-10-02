@@ -1,15 +1,24 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { SNAILPAY_TEST_CARD, SNAILPAY_TEST_CVV, SNAILPAY_TEST_DATE } from "@snail/shared"
+import { formatCardNumber } from "../hooks/usePaymentMasks"
 import { PAYMENT_COPY } from "../constants/payment.copy"
 
-const TEST_CARDS = [
-    { number: "4111111111111111", label: "4111 1111 1111 1111", result: "Pago exitoso" },
-    { number: "4111111100000000", label: "4111 1111 0000 0000", result: "Error de Snail pay" },
-    { number: "4111000000000000", label: "4111 0000 0000 0000", result: "Saldo insuficiente" },
-    { number: "4222222222222222", label: "4222 2222 2222 2222", result: "Timeout" },
+export type TestCard = {
+    number: string;
+    date?: string;
+    cvv?: string;
+    result: string;
+}
+
+const TEST_CARDS: TestCard[] = [
+    { number: SNAILPAY_TEST_CARD, date: SNAILPAY_TEST_DATE, cvv: SNAILPAY_TEST_CVV, result: "Pago exitoso" },
+    { number: "4111111100000000", result: "Error de Snail pay" },
+    { number: "4111000000000000", result: "Saldo insuficiente" },
+    { number: "4222222222222222", result: "Timeout" },
 ]
 
 type TestCardsProps = {
-    onSelect: (cardNumber: string) => void;
+    onSelect: (card: TestCard) => void;
 }
 
 export const TestCards = ({ onSelect }: TestCardsProps) => (
@@ -22,8 +31,8 @@ export const TestCards = ({ onSelect }: TestCardsProps) => (
                         <li key={card.number} className="flex flex-row gap-3 justify-between">
                             <span
                                 className="font-mono underline text-blue-400 cursor-pointer"
-                                onClick={() => onSelect(card.number)}>
-                                {card.label}
+                                onClick={() => onSelect(card)}>
+                                {formatCardNumber(card.number)}
                             </span>
                             <span>{card.result}</span>
                         </li>

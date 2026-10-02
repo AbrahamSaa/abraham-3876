@@ -18,19 +18,16 @@ const messages = {
     amountInvalid: "Monto no válido",
     amountMin: `El monto mínimo es ${MIN_AMOUNT}`,
     amountMax: `El monto máximo es ${MAX_AMOUNT.toLocaleString("en-US")}`,
+    emailInvalid: "Correo electrónico no válido",
     amountDecimals: "El monto admite máximo 2 decimales",
 };
 
-// The card is valid through the last day of its expiry month.
 const isNotExpired = (value: string) => {
     const [month, year] = value.split("/").map(Number);
-    // Date months are 0-based, so passing `month` yields the first day of the month after expiry.
     const firstDayAfterExpiry = new Date(2000 + year, month, 1);
     return firstDayAfterExpiry > new Date();
 };
 
-// Rounds to 6 decimals first to absorb floating point noise (e.g. 1.1 * 100 = 110.00000000000001),
-// then checks that the value has no more than 2 decimals.
 const hasAtMostTwoDecimals = (value: number) =>
     Number.isInteger(Math.round(value * 1e6) / 1e4);
 
@@ -62,5 +59,10 @@ export const paymentSchema = z.object({
     amount: amountSchema,
 });
 
+export const paymentRequestSchema = paymentSchema.extend({
+    email: z.email({ error: messages.emailInvalid }),
+});
+
 export type PaymentFormInput = z.input<typeof paymentSchema>;
 export type PaymentFormValues = z.output<typeof paymentSchema>;
+export type PaymentRequestValues = z.output<typeof paymentRequestSchema>;

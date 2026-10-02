@@ -1,13 +1,14 @@
 import { Check } from "lucide-react"
 import { PAYMENT_COPY } from "../constants/payment.copy"
-import type { PaymentReceipt } from "../types/payment-state"
 import { PaymentResult } from "./PaymentResult"
+import type { PaymentResponse } from "@snail/shared";
 
 const formatMoney = (value: number) => `$${value.toFixed(2)}`
 
 type PaymentSuccessProps = {
-    receipt: PaymentReceipt;
+    receipt: PaymentResponse;
     onClose: () => void;
+    newBalance: number;
 }
 
 const getRowClassName = (index: number, total: number) => {
@@ -18,14 +19,14 @@ const getRowClassName = (index: number, total: number) => {
     return `flex flex-row gap-3 justify-between ${padding} ${border}`
 }
 
-export const PaymentSuccess = ({ receipt, onClose }: PaymentSuccessProps) => {
+export const PaymentSuccess = ({ receipt, onClose, newBalance }: PaymentSuccessProps) => {
+
     const rows = [
-        { label: "Monto abonado", value: formatMoney(receipt.amount) },
-        { label: "Nuevo saldo", value: formatMoney(receipt.newBalance) },
-        { label: "Código de autorización", value: receipt.authorizationCode },
+        { label: "Monto abonado", value: formatMoney(receipt.transaction_amount) },
+        { label: "Nuevo saldo", value: formatMoney(newBalance) },
+        { label: "Código de autorización", value: receipt.authorization_code },
         { label: "Referencia", value: receipt.reference },
-        { label: "Fecha", value: receipt.date },
-        { label: "Tarjeta", value: `**** **** **** ${receipt.cardLast4}` },
+        { label: "Fecha", value: receipt.date_created }
     ]
 
     return (
