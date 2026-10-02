@@ -20,8 +20,7 @@ export const PAYMENT_COPY = {
         close: "Volver al dashboard",
     },
     fail: {
-        title: "Pago rechazado",
-        retry: "Intentar de nuevo",
+        title: "Error al procesar tu pago",
     },
     testCards: {
         title: "Tarjetas de prueba",

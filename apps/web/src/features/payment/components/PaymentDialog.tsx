@@ -12,9 +12,13 @@ import { Snail } from "lucide-react"
 import { useState } from "react"
 import { PAYMENT_COPY } from "../constants/payment.copy"
 import type { PaymentState } from "../types/payment-state"
-import { PaymentFail } from "./PaymentFail"
 import { PaymentForm } from "./PaymentForm"
 import { PaymentSuccess } from "./PaymentSuccess"
+import type { PaymentFormValues } from "@snail/shared"
+import { addAmounts, usePayment } from "../services/payment";
+import { useAuth } from "../../auth/hooks/useAuth"
+import { usePaymentContext } from "../hooks/usePaymentContext"
+import { ErrorPayment } from "@/src/types"
 
 const INITIAL_STATE: PaymentState = { status: "form" }
 
@@ -37,9 +41,11 @@ const trigger = (
 )
 
 export const PaymentDialog = () => {
+    const { addFunds, storeCard, userFunds, userCard } = usePaymentContext();
+    const { user } = useAuth();
     const [open, setOpen] = useState(false)
     const [state, setState] = useState<PaymentState>(INITIAL_STATE)
-
+    const { mutateAsync, isPending } = usePayment()
     const reset = () => setState(INITIAL_STATE)
 
     const handleOpenChange = (nextOpen: boolean) => {
@@ -47,27 +53,35 @@ export const PaymentDialog = () => {
         if (!nextOpen) reset()
     }
 
-    const close = () => handleOpenChange(false)
+    const close = () => handleOpenChange(false);
 
-    // TODO: replace with the real payment service call, then
-    // setState({ status: "success", receipt }) or setState({ status: "error", message }).
-    const handlePay = async () => {}
+    const handlePay = async (values: PaymentFormValues) => {
+        const receipt = await mutateAsync({ ...values, email: user?.email ?? "" })
+
+        // Never credit funds unless SnailPay explicitly approved the operation.
+        if (receipt.status !== "approved") {
+            throw new ErrorPayment(receipt.status_detail, { errorStatus: receipt.error_status });
+        }
+
+        const newBalance = addAmounts(userFunds?.funds ?? 0, receipt.transaction_amount);
+        storeCard(values);
+        addFunds(receipt.transaction_amount);
+        setState({ status: "success", receipt, newBalance });
+    }
 
     const renderBody = () => {
         switch (state.status) {
             case "form":
-                return <PaymentForm onSubmit={handlePay} />
+                return <PaymentForm onSubmit={handlePay} isLoading={isPending} userCard={userCard} />
             case "success":
-                return <PaymentSuccess receipt={state.receipt} onClose={close} />
-            case "error":
-                return <PaymentFail message={state.message} onRetry={reset} />
+                return <PaymentSuccess receipt={state.receipt} onClose={close} newBalance={state.newBalance} />
         }
     }
 
     return (
-        <AlertDialog open={open} onOpenChange={handleOpenChange}>
+        <AlertDialog open={open} onOpenChange={handleOpenChange} >
             <AlertDialogTrigger render={trigger} />
-            <AlertDialogContent>
+            <AlertDialogContent className={"min-h-auto max-h-[calc(100dvh-2rem)] overflow-y-auto"}>
                 <PaymentDialogHeader />
                 {renderBody()}
             </AlertDialogContent>

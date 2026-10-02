@@ -8,7 +8,6 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-    // localStorage is synchronous, so the session can be restored on the first render.
     const [session] = useState(getStoredSession);
     const [authStatus, setAuthStatus] = useState<AuthStatus>(session ? "authenticated" : "unauthenticated");
     const [user, setUser] = useState<SessionUser | undefined>(session ?? undefined);

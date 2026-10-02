@@ -1,4 +1,5 @@
 import { useAuth } from '../../auth/hooks/useAuth';
+import { usePaymentContext } from '../../payment/hooks/usePaymentContext';
 import { Pill } from '../components/Pill';
 import { SnailBarGraph } from '../components/SnailBarGraph';
 import { SnailCreditCard } from '../components/SnailCreditCard';
@@ -11,6 +12,8 @@ const formatLongDate = (date: Date) =>
 export const DashboardScreen = () => {
     const { user } = useAuth();
 
+    const { userFunds } = usePaymentContext();
+
     return (
         <div className='w-full flex flex-col gap-6 bg-transparent'>
             <div className='flex gap-3 justify-between items-center'>
@@ -21,7 +24,7 @@ export const DashboardScreen = () => {
                 <Pill className='text-sm'>Datos simulados</Pill>
             </div>
             <div className='grid grid-cols-3 max-lg:grid-cols-2 gap-6 grid-rows-2 max-md:grid-cols-1'>
-                <SnailCreditCard className='max-md:col-span-2' />
+                <SnailCreditCard className='max-md:col-span-2' userFunds={userFunds} />
                 <SnailPieGraph className='max-md:col-span-2' />
                 <SnailRaceCard className='row-span-2 max-lg:col-span-2' />
                 <SnailBarGraph className='col-span-2' />
