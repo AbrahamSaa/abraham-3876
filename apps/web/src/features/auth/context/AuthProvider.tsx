@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState, type ReactNode } from "react";
-import type { SessionUser } from "../interfaces/user.interface";
+import type { SessionUser } from "../types/user";
 import { AuthContext, type AuthStatus } from "./AuthContext";
 import { clearSession, getStoredSession } from "../services/authService";
 

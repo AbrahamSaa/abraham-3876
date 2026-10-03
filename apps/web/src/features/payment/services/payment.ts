@@ -13,7 +13,6 @@ export const usePayment = () =>
         retry: 0,
     });
 
-// Amounts are kept to cents to avoid floating point drift when adding funds.
 export const addAmounts = (a: number, b: number) => Math.round((a + b) * 100) / 100;
 
 const getCards = () => storage.get<UserCards[]>(SAVED_CARDS) ?? [];
@@ -26,11 +25,9 @@ const upsert = <T extends { userId: string }>(items: T[], item: T) =>
 
 export const getCard = (userId: string) => getCards().find((card) => card.userId === userId);
 
-// Users start with a $0 balance.
 export const getFund = (userId: string): UserFunds =>
     getFunds().find((fund) => fund.userId === userId) ?? { userId, funds: 0 };
 
-// The card number and CVV are stored on purpose (fictitious test data, required by the spec).
 export const saveCard = (userId: string, card: PaymentFormValues) => {
     const newCard: UserCards = {
         userId,

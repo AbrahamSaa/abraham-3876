@@ -1,6 +1,6 @@
 import { storage, type PaymentResponse } from "@snail/shared";
 import { SESSION_KEY } from "../features/auth/constants/storage-keys";
-import type { SessionUser } from "../features/auth/interfaces/user.interface";
+import type { SessionUser } from "../features/auth/types/user.interface";
 import { ErrorPayment } from "@/src/types/index";
 
 const apiUrl = import.meta.env.VITE_API_URL ?? "";

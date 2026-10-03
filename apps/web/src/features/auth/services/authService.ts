@@ -1,9 +1,10 @@
 import { storage, type LoginFormValues, type SignupFormValues } from "@snail/shared"
 import { SESSION_KEY, STORED_USERS_KEY } from "../constants/storage-keys"
-import type { SessionUser, StoredUser } from "../interfaces/user.interface"
+import type { SessionUser, StoredUser } from "../types/user.interface"
 import { hashPassword, verifyPassword } from "./passwordHasher"
 
 const EMAIL_TAKEN_MESSAGE = "El correo electronico que intentas ingresar ya esta registrado inicia sesión o crea uno nuevo"
+const EMPTY_PASSWORD_MESSAGE = "La contraseña no puede estar vacía"
 const INVALID_CREDENTIALS_MESSAGE = "Usuario o contraseña incorrecto, vuelva intentarlo"
 
 const normalizeEmail = (email: string) => email.trim().toLowerCase()
@@ -30,7 +31,12 @@ export const signup = async (values: SignupFormValues) => {
         throw new Error(EMAIL_TAKEN_MESSAGE)
     }
 
-    const { hash, salt } = await hashPassword(values.password)
+    const hashed = await hashPassword(values.password)
+    if (hashed === null) {
+        throw new Error(EMPTY_PASSWORD_MESSAGE)
+    }
+
+    const { hash, salt } = hashed
     const user: StoredUser = {
         id: crypto.randomUUID(),
         email: normalizeEmail(values.email),

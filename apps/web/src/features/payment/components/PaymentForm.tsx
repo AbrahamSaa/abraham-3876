@@ -42,7 +42,6 @@ export const PaymentForm = ({ onSubmit, isLoading, userCard }: Props) => {
     } = useForm<PaymentFormInput, unknown, PaymentFormValues>({
         resolver: zodResolver(paymentSchema),
         mode: "onTouched",
-        // Memoized: `values` re-syncs the form whenever its identity changes, which would wipe user input.
         values: savedValues,
     });
     const { cardMask, expDateMask, cvvMask } = usePaymentMasks();

@@ -1,4 +1,4 @@
-import type { HashPassword } from "../interfaces/hash-password.interface";
+import type { HashPassword } from "../types/hash-password";
 
 // Demo value. A real deployment should use at least 600,000 iterations (OWASP guidance for PBKDF2-SHA256)
 // and hash on the server, not in the browser.
@@ -31,7 +31,10 @@ const derive = async (password: string, salt: Uint8Array<ArrayBuffer>) => {
     );
 };
 
-export const hashPassword = async (password: string): Promise<HashPassword> => {
+export const hashPassword = async (password: string): Promise<HashPassword | null> => {
+    if (password === "") {
+        return null;
+    }
     const salt = crypto.getRandomValues(new Uint8Array(SALT_BYTES));
     const hash = await derive(password, salt);
 
