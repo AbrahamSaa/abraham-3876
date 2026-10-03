@@ -7,7 +7,7 @@ export const Header = () => {
         <header className='w-full p-4 shadow-sm flex flex-wrap justify-between bg-white'>
             <Link to={"/dashboard"} className='flex flex-wrap gap-3 items-center'>
                 <Snail className='text-primary' />
-                <h5 className='font-semibold text-2xl'> Snail app</h5>
+                <h5 className='font-semibold text-2xl'> Snail Race</h5>
             </Link>
             <UserAvatar />
         </header>
