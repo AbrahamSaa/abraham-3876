@@ -5,9 +5,13 @@
   "main": "index.js",
   "scripts": {
     "dev": "pnpm -r --parallel --filter \"./apps/*\" dev",
+    "build": "pnpm -r --filter \"./apps/*\" build",
+    "typecheck": "pnpm -r --filter \"./apps/*\" --filter \"./packages/*\" typecheck",
     "test": "pnpm -r --filter \"./apps/*\" test",
     "test:web": "pnpm --filter ./apps/web test",
-    "test:api": "pnpm --filter ./apps/api test"
+    "test:api": "pnpm --filter ./apps/api test",
+    "build:web": "pnpm --filter ./apps/web build",
+    "build:api": "pnpm --filter ./apps/api build"
   },
   "keywords": [],
   "author": "",

@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import type { SessionUser } from "../types/user.interface";
+import type { SessionUser } from "../types/user";
 
 export type AuthStatus = "initial" | "authenticated" | "unauthenticated";
 

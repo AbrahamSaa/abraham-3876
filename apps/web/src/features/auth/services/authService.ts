@@ -1,6 +1,6 @@
 import { storage, type LoginFormValues, type SignupFormValues } from "@snail/shared"
 import { SESSION_KEY, STORED_USERS_KEY } from "../constants/storage-keys"
-import type { SessionUser, StoredUser } from "../types/user.interface"
+import type { SessionUser, StoredUser } from "../types/user"
 import { hashPassword, verifyPassword } from "./passwordHasher"
 
 const EMAIL_TAKEN_MESSAGE = "El correo electronico que intentas ingresar ya esta registrado inicia sesión o crea uno nuevo"

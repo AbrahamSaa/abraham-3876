@@ -1,7 +1,7 @@
 import type { LoginFormValues, SignupFormValues } from "@snail/shared"
 import { beforeEach, describe, expect, test } from "vitest"
 import { SESSION_KEY, STORED_USERS_KEY } from "../constants/storage-keys"
-import type { StoredUser } from "../types/user.interface"
+import type { StoredUser } from "../types/user"
 import { clearSession, getStoredSession, login, signup } from "./authService"
 
 const validUser = { name: "Abraham", email: "abraham@test.com", password: "Password1234" }
