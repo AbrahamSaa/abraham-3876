@@ -65,7 +65,7 @@ export const SnailPieGraph = ({ wins = 10, losses = 15, className }: SnailPieGra
                     </PieChart>
                     <div className='absolute inset-0 flex flex-col items-center justify-center pointer-events-none'>
                         <span className='text-3xl font-bold text-primary'>{winPercentage}%</span>
-                        <span className='text-sm text-gray-500'>Wins</span>
+                        <span className='text-sm text-gray-500'>Ganados</span>
                     </div>
                 </div>
                 <div className='flex flex-1 flex-col gap-2'>

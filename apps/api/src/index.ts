@@ -8,9 +8,10 @@ const app = express();
 
 app.use(cors(
     {
-        origin: [
-            process.env.CORS_ORIGIN || "http://localhost:5173",
-        ]
+        // Comma-separated list, e.g. "https://snail-app.abrahamsaavedra.com,http://localhost:5173"
+        origin: (process.env.CORS_ORIGIN || "http://localhost:5173")
+            .split(",")
+            .map((origin) => origin.trim()),
     }
 ));
 
